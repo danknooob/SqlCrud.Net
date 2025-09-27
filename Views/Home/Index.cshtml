@@ -1,0 +1,122 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center mb-5">
+    <h1 class="display-4 text-primary fw-bold">
+        <i class="fas fa-database me-3"></i>SQL CRUD Application
+    </h1>
+    <p class="lead text-muted">A modern ASP.NET MVC application with Entity Framework and SQL Server</p>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-5">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-box fa-3x mb-3"></i>
+                <h3 class="card-title">@ViewBag.TotalProducts</h3>
+                <p class="card-text">Total Products</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-tags fa-3x mb-3"></i>
+                <h3 class="card-title">@ViewBag.TotalCategories</h3>
+                <p class="card-text">Categories</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-info text-white h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-dollar-sign fa-3x mb-3"></i>
+                <h3 class="card-title">@(((decimal)ViewBag.TotalValue).ToString("C"))</h3>
+                <p class="card-text">Total Inventory Value</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Products Section -->
+@if (ViewBag.RecentProducts != null && ((List<Product>)ViewBag.RecentProducts).Any())
+{
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-star me-2"></i>Recent Products
+            </h2>
+        </div>
+    </div>
+    
+    <div class="row">
+        @foreach (var product in (List<Product>)ViewBag.RecentProducts)
+        {
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="card-title mb-0 text-primary">@product.Name</h5>
+                        <small class="text-muted">@product.Category</small>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">@(product.Description?.Length > 100 ? product.Description.Substring(0, 100) + "..." : product.Description)</p>
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <strong class="text-success fs-5">@product.Price.ToString("C")</strong>
+                            </div>
+                            <div class="col-6">
+                                <span class="badge bg-primary">@product.StockQuantity in stock</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>
+                                @product.DateCreated.ToString("MMM dd, yyyy")
+                            </small>
+                            <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye me-1"></i>View
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<!-- Quick Actions -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0">
+                    <i class="fas fa-bolt me-2"></i>Quick Actions
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <a asp-controller="Products" asp-action="Create" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-plus me-2"></i>Add New Product
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <a asp-controller="Products" asp-action="Index" class="btn btn-success btn-lg w-100">
+                            <i class="fas fa-list me-2"></i>View All Products
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <a asp-controller="Home" asp-action="Privacy" class="btn btn-info btn-lg w-100">
+                            <i class="fas fa-shield-alt me-2"></i>Privacy Policy
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SQLCRUD</name>
+    </assembly>
+    <members>
+        <member name="T:SQLCRUD.Controllers.ProductsApiController">
+            <summary>
+            API Controller for managing products with full CRUD operations
+            </summary>
+        </member>
+        <member name="M:SQLCRUD.Controllers.ProductsApiController.GetProducts(System.String,System.String)">
+            <summary>
+            Get all products with optional search and filtering
+            </summary>
+            <param name="searchString">Search term for name, description, or category</param>
+            <param name="categoryFilter">Filter by specific category</param>
+            <returns>List of products</returns>
+            <response code="200">Returns the list of products</response>
+        </member>
+        <member name="M:SQLCRUD.Controllers.ProductsApiController.GetProduct(System.Int32)">
+            <summary>
+            Get a specific product by ID
+            </summary>
+            <param name="id">Product ID</param>
+            <returns>Product details</returns>
+            <response code="200">Returns the requested product</response>
+            <response code="404">Product not found</response>
+        </member>
+        <member name="M:SQLCRUD.Controllers.ProductsApiController.GetCategories">
+            <summary>
+            Get all available product categories
+            </summary>
+            <returns>List of unique categories</returns>
+            <response code="200">Returns the list of categories</response>
+        </member>
+        <member name="M:SQLCRUD.Controllers.ProductsApiController.GetStatistics">
+            <summary>
+            Get product statistics
+            </summary>
+            <returns>Product statistics summary</returns>
+            <response code="200">Returns product statistics</response>
+        </member>
+        <member name="M:SQLCRUD.Controllers.ProductsApiController.CreateProduct(SQLCRUD.Controllers.CreateProductDto)">
+            <summary>
+            Create a new product
+            </summary>
+            <param name="product">Product data</param>
+            <returns>Created product</returns>
+            <response code="201">Product created successfully</response>
+            <response code="400">Invalid product data</response>
+        </member>
+        <member name="M:SQLCRUD.Controllers.ProductsApiController.UpdateProduct(System.Int32,SQLCRUD.Controllers.UpdateProductDto)">
+            <summary>
+            Update an existing product
+            </summary>
+            <param name="id">Product ID</param>
+            <param name="product">Updated product data</param>
+            <returns>Updated product</returns>
+            <response code="200">Product updated successfully</response>
+            <response code="400">Invalid product data</response>
+            <response code="404">Product not found</response>
+        </member>
+        <member name="M:SQLCRUD.Controllers.ProductsApiController.DeleteProduct(System.Int32)">
+            <summary>
+            Delete a product
+            </summary>
+            <param name="id">Product ID</param>
+            <returns>Success message</returns>
+            <response code="200">Product deleted successfully</response>
+            <response code="404">Product not found</response>
+        </member>
+        <member name="T:SQLCRUD.Controllers.CreateProductDto">
+            <summary>
+            Data Transfer Object for creating a new product
+            </summary>
+        </member>
+        <member name="P:SQLCRUD.Controllers.CreateProductDto.Name">
+            <summary>
+            Product name
+            </summary>
+            <example>Laptop Pro 15</example>
+        </member>
+        <member name="P:SQLCRUD.Controllers.CreateProductDto.Description">
+            <summary>
+            Product description
+            </summary>
+            <example>High-performance laptop with latest processor</example>
+        </member>
+        <member name="P:SQLCRUD.Controllers.CreateProductDto.Price">
+            <summary>
+            Product price
+            </summary>
+            <example>1299.99</example>
+        </member>
+        <member name="P:SQLCRUD.Controllers.CreateProductDto.Category">
+            <summary>
+            Product category
+            </summary>
+            <example>Electronics</example>
+        </member>
+        <member name="P:SQLCRUD.Controllers.CreateProductDto.StockQuantity">
+            <summary>
+            Stock quantity
+            </summary>
+            <example>25</example>
+        </member>
+        <member name="P:SQLCRUD.Controllers.CreateProductDto.IsActive">
+            <summary>
+            Whether the product is active
+            </summary>
+            <example>true</example>
+        </member>
+        <member name="T:SQLCRUD.Controllers.UpdateProductDto">
+            <summary>
+            Data Transfer Object for updating an existing product
+            </summary>
+        </member>
+        <member name="P:SQLCRUD.Controllers.UpdateProductDto.Name">
+            <summary>
+            Product name
+            </summary>
+            <example>Laptop Pro 15</example>
+        </member>
+        <member name="P:SQLCRUD.Controllers.UpdateProductDto.Description">
+            <summary>
+            Product description
+            </summary>
+            <example>High-performance laptop with latest processor</example>
+        </member>
+        <member name="P:SQLCRUD.Controllers.UpdateProductDto.Price">
+            <summary>
+            Product price
+            </summary>
+            <example>1299.99</example>
+        </member>
+        <member name="P:SQLCRUD.Controllers.UpdateProductDto.Category">
+            <summary>
+            Product category
+            </summary>
+            <example>Electronics</example>
+        </member>
+        <member name="P:SQLCRUD.Controllers.UpdateProductDto.StockQuantity">
+            <summary>
+            Stock quantity
+            </summary>
+            <example>25</example>
+        </member>
+        <member name="P:SQLCRUD.Controllers.UpdateProductDto.IsActive">
+            <summary>
+            Whether the product is active
+            </summary>
+            <example>true</example>
+        </member>
+    </members>
+</doc>

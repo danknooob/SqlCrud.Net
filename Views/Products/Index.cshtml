@@ -1,0 +1,133 @@
+@model IEnumerable<Product>
+
+@{
+    ViewData["Title"] = "Product Management";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Left Side - Add Product Form -->
+        <div class="col-md-4">
+            <div class="add-product-section">
+                <h2 class="section-title">Add Product</h2>
+                
+                <form asp-action="Create" method="post" class="add-product-form">
+                    <div class="form-group">
+                        <label asp-for="First().Name" class="form-label">Product Name</label>
+                        <input asp-for="First().Name" class="form-control" placeholder="Enter product name" />
+                        <span asp-validation-for="First().Name" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="First().Category" class="form-label">Category</label>
+                        <input asp-for="First().Category" class="form-control" placeholder="Enter category" />
+                        <span asp-validation-for="First().Category" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="First().Description" class="form-label">Description</label>
+                        <textarea asp-for="First().Description" class="form-control" rows="3" placeholder="Enter description"></textarea>
+                        <span asp-validation-for="First().Description" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="First().Price" class="form-label">Price</label>
+                                <input asp-for="First().Price" class="form-control" placeholder="0.00" step="0.01" />
+                                <span asp-validation-for="First().Price" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="First().StockQuantity" class="form-label">Stock</label>
+                                <input asp-for="First().StockQuantity" class="form-control" placeholder="0" />
+                                <span asp-validation-for="First().StockQuantity" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-add">ADD</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Right Side - Products Table -->
+        <div class="col-md-8">
+            <div class="products-section">
+                <h2 class="section-title">Products</h2>
+                
+                @if (Model.Any())
+                {
+                    <div class="products-grid">
+                        @foreach (var item in Model)
+                        {
+                            <div class="product-block">
+                                <div class="block-header">
+                                    <h3 class="product-name">@item.Name</h3>
+                                    <span class="product-category">@item.Category</span>
+                                </div>
+                                
+                                <div class="block-content">
+                                    <div class="description-section">
+                                        @if (!string.IsNullOrEmpty(item.Description))
+                                        {
+                                            <p class="product-description">@item.Description</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="no-description">NO DESCRIPTION</p>
+                                        }
+                                    </div>
+                                    
+                                    <div class="price-section">
+                                        <div class="formatted-price">₹ @item.Price.ToString("N2")</div>
+                                        <div class="price-label">Price</div>
+                                        <div class="raw-price">@((int)item.Price * 10000)</div>
+                                    </div>
+                                    
+                                    <div class="stock-section">
+                                        <div class="stock-status">In Stock</div>
+                                    </div>
+                                    
+                                    <div class="date-section">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>Created: @item.DateCreated.ToString("MMM dd, yyyy")</span>
+                                    </div>
+                                    
+                                    <div class="status-section">
+                                        <span class="status-badge @(item.IsActive ? "active" : "inactive")">
+                                            @(item.IsActive ? "Active" : "Inactive")
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="block-actions">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="action-link">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="action-link">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="action-link">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="no-products">
+                        <p>No products found. Add your first product using the form on the left.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
