@@ -66,6 +66,12 @@ namespace SQLCRUD.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+            // Prevent caching of this page to ensure fresh form every time
+            Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+            Response.Headers["Pragma"] = "no-cache";
+            Response.Headers["Expires"] = "0";
+            
+            // Return view without any model to ensure completely empty form
             return View();
         }
 
@@ -82,7 +88,14 @@ namespace SQLCRUD.Controllers
                 TempData["SuccessMessage"] = "Product created successfully!";
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            
+            // Prevent caching and return completely fresh empty form
+            Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+            Response.Headers["Pragma"] = "no-cache";
+            Response.Headers["Expires"] = "0";
+            
+            // Return view without any model to ensure completely empty form
+            return View();
         }
 
         // GET: Products/Edit/5

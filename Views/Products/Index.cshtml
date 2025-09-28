@@ -6,57 +6,21 @@
 
 <div class="container-fluid">
     <div class="row">
-        <!-- Left Side - Add Product Form -->
-        <div class="col-md-4">
-            <div class="add-product-section">
-                <h2 class="section-title">Add Product</h2>
-                
-                <form asp-action="Create" method="post" class="add-product-form">
-                    <div class="form-group">
-                        <label asp-for="First().Name" class="form-label">Product Name</label>
-                        <input asp-for="First().Name" class="form-control" placeholder="Enter product name" />
-                        <span asp-validation-for="First().Name" class="text-danger"></span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label asp-for="First().Category" class="form-label">Category</label>
-                        <input asp-for="First().Category" class="form-control" placeholder="Enter category" />
-                        <span asp-validation-for="First().Category" class="text-danger"></span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label asp-for="First().Description" class="form-label">Description</label>
-                        <textarea asp-for="First().Description" class="form-control" rows="3" placeholder="Enter description"></textarea>
-                        <span asp-validation-for="First().Description" class="text-danger"></span>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label asp-for="First().Price" class="form-label">Price</label>
-                                <input asp-for="First().Price" class="form-control" placeholder="0.00" step="0.01" />
-                                <span asp-validation-for="First().Price" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label asp-for="First().StockQuantity" class="form-label">Stock</label>
-                                <input asp-for="First().StockQuantity" class="form-control" placeholder="0" />
-                                <span asp-validation-for="First().StockQuantity" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-add">ADD</button>
-                </form>
+        <!-- Header Section with Add Product Link -->
+        <div class="col-12 mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="display-4 fw-bold text-primary">
+                    <i class="fas fa-box me-3"></i>Product Management
+                </h1>
+                <a asp-action="Create" class="btn btn-success btn-lg px-4">
+                    <i class="fas fa-plus me-2"></i>Add Product
+                </a>
             </div>
         </div>
         
-        <!-- Right Side - Products Table -->
-        <div class="col-md-8">
+        <!-- Products Section -->
+        <div class="col-12">
             <div class="products-section">
-                <h2 class="section-title">Products</h2>
-                
                 @if (Model.Any())
                 {
                     <div class="products-grid">
@@ -119,8 +83,17 @@
                 }
                 else
                 {
-                    <div class="no-products">
-                        <p>No products found. Add your first product using the form on the left.</p>
+                    <div class="no-products text-center py-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                                <h3 class="text-muted">No Products Found</h3>
+                                <p class="text-muted mb-4">Start by adding your first product to the system.</p>
+                                <a asp-action="Create" class="btn btn-success btn-lg">
+                                    <i class="fas fa-plus me-2"></i>Add Your First Product
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 }
             </div>

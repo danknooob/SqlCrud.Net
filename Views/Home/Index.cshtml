@@ -2,39 +2,59 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center mb-5">
-    <h1 class="display-4 text-primary fw-bold">
-        <i class="fas fa-database me-3"></i>SQL CRUD Application
-    </h1>
-    <p class="lead text-muted">A modern ASP.NET MVC application with Entity Framework and SQL Server</p>
+<!-- Hero Section -->
+<div class="hero-section text-center mb-5 py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
+    <div class="container">
+        <h1 class="display-3 fw-bold mb-4">
+            <i class="fas fa-store me-3"></i>Product Management System
+        </h1>
+        <p class="lead mb-4">Streamline your inventory with our powerful CRUD application built on ASP.NET MVC</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a asp-controller="Products" asp-action="Create" class="btn btn-light btn-lg px-4">
+                <i class="fas fa-plus me-2"></i>Add Product
+            </a>
+            <a asp-controller="Products" asp-action="Index" class="btn btn-outline-light btn-lg px-4">
+                <i class="fas fa-list me-2"></i>View Products
+            </a>
+        </div>
+    </div>
 </div>
 
 <!-- Statistics Cards -->
 <div class="row mb-5">
-    <div class="col-md-4">
-        <div class="card bg-primary text-white h-100">
-            <div class="card-body text-center">
-                <i class="fas fa-box fa-3x mb-3"></i>
-                <h3 class="card-title">@ViewBag.TotalProducts</h3>
-                <p class="card-text">Total Products</p>
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-lg border-0 h-100" style="background: linear-gradient(45deg, #667eea, #764ba2);">
+            <div class="card-body text-center text-white">
+                <div class="mb-3">
+                    <i class="fas fa-box fa-4x opacity-75"></i>
+                </div>
+                <h2 class="card-title fw-bold">@ViewBag.TotalProducts</h2>
+                <p class="card-text fs-5">Total Products</p>
+                <small class="opacity-75">Manage your inventory</small>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card bg-success text-white h-100">
-            <div class="card-body text-center">
-                <i class="fas fa-tags fa-3x mb-3"></i>
-                <h3 class="card-title">@ViewBag.TotalCategories</h3>
-                <p class="card-text">Categories</p>
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-lg border-0 h-100" style="background: linear-gradient(45deg, #f093fb, #f5576c);">
+            <div class="card-body text-center text-white">
+                <div class="mb-3">
+                    <i class="fas fa-tags fa-4x opacity-75"></i>
+                </div>
+                <h2 class="card-title fw-bold">@ViewBag.TotalCategories</h2>
+                <p class="card-text fs-5">Categories</p>
+                <small class="opacity-75">Organize by type</small>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card bg-info text-white h-100">
-            <div class="card-body text-center">
-                <i class="fas fa-dollar-sign fa-3x mb-3"></i>
-                <h3 class="card-title">@(((decimal)ViewBag.TotalValue).ToString("C"))</h3>
-                <p class="card-text">Total Inventory Value</p>
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-lg border-0 h-100" style="background: linear-gradient(45deg, #4facfe, #00f2fe);">
+            <div class="card-body text-center text-white">
+                <div class="mb-3">
+                    <i class="fas fa-dollar-sign fa-4x opacity-75"></i>
+                </div>
+                <h2 class="card-title fw-bold">@(((decimal)ViewBag.TotalValue).ToString("C"))</h2>
+                <p class="card-text fs-5">Inventory Value</p>
+                <small class="opacity-75">Total worth</small>
             </div>
         </div>
     </div>
@@ -43,11 +63,12 @@
 <!-- Recent Products Section -->
 @if (ViewBag.RecentProducts != null && ((List<Product>)ViewBag.RecentProducts).Any())
 {
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-12">
-            <h2 class="mb-4">
-                <i class="fas fa-star me-2"></i>Recent Products
+            <h2 class="text-center mb-4">
+                <i class="fas fa-star me-2 text-warning"></i>Latest Products
             </h2>
+            <hr class="w-50 mx-auto mb-5">
         </div>
     </div>
     
@@ -55,31 +76,46 @@
         @foreach (var product in (List<Product>)ViewBag.RecentProducts)
         {
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-header bg-light">
-                        <h5 class="card-title mb-0 text-primary">@product.Name</h5>
-                        <small class="text-muted">@product.Category</small>
+                <div class="card h-100 shadow-lg border-0 product-card" style="transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                    <div class="card-header bg-gradient text-white" style="background: linear-gradient(45deg, #667eea, #764ba2);">
+                        <h5 class="card-title mb-1 fw-bold">@product.Name</h5>
+                        <small class="opacity-75">
+                            <i class="fas fa-tag me-1"></i>@product.Category
+                        </small>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">@(product.Description?.Length > 100 ? product.Description.Substring(0, 100) + "..." : product.Description)</p>
-                        <div class="row text-center">
+                        <p class="card-text text-muted">
+                            @if (!string.IsNullOrEmpty(product.Description))
+                            {
+                                @(product.Description.Length > 80 ? product.Description.Substring(0, 80) + "..." : product.Description)
+                            }
+                            else
+                            {
+                                <em>No description available</em>
+                            }
+                        </p>
+                        <div class="row text-center mb-3">
                             <div class="col-6">
-                                <strong class="text-success fs-5">@product.Price.ToString("C")</strong>
+                                <div class="price-display">
+                                    <strong class="text-success fs-4">@product.Price.ToString("C")</strong>
+                                </div>
                             </div>
                             <div class="col-6">
-                                <span class="badge bg-primary">@product.StockQuantity in stock</span>
+                                <span class="badge bg-info fs-6 px-3 py-2">
+                                    <i class="fas fa-boxes me-1"></i>@product.StockQuantity
+                                </span>
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer bg-transparent">
+                    <div class="card-footer bg-light">
                         <div class="d-flex justify-content-between align-items-center">
                             <small class="text-muted">
-                                <i class="fas fa-calendar me-1"></i>
+                                <i class="fas fa-calendar-alt me-1"></i>
                                 @product.DateCreated.ToString("MMM dd, yyyy")
                             </small>
                             <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" 
-                               class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye me-1"></i>View
+                               class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye me-1"></i>View Details
                             </a>
                         </div>
                     </div>
@@ -88,35 +124,129 @@
         }
     </div>
 }
+else
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-box-open fa-5x text-muted mb-4"></i>
+                <h3 class="text-muted">No Products Yet</h3>
+                <p class="lead text-muted">Start by adding your first product to see it here!</p>
+                <a asp-controller="Products" asp-action="Create" class="btn btn-primary btn-lg mt-3">
+                    <i class="fas fa-plus me-2"></i>Add Your First Product
+                </a>
+            </div>
+        </div>
+    </div>
+}
 
 <!-- Quick Actions -->
 <div class="row mt-5">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="mb-0">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-light text-center">
+                <h3 class="mb-0 text-primary">
                     <i class="fas fa-bolt me-2"></i>Quick Actions
                 </h3>
+                <p class="text-muted mb-0">Get started with these common tasks</p>
             </div>
-            <div class="card-body">
+            <div class="card-body p-4">
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <a asp-controller="Products" asp-action="Create" class="btn btn-primary btn-lg w-100">
-                            <i class="fas fa-plus me-2"></i>Add New Product
-                        </a>
+                        <div class="text-center">
+                            <a asp-controller="Products" asp-action="Create" class="btn btn-primary btn-lg w-100 mb-2">
+                                <i class="fas fa-plus me-2"></i>Add New Product
+                            </a>
+                            <small class="text-muted">Create a new product entry</small>
+                        </div>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <a asp-controller="Products" asp-action="Index" class="btn btn-success btn-lg w-100">
-                            <i class="fas fa-list me-2"></i>View All Products
-                        </a>
+                        <div class="text-center">
+                            <a asp-controller="Products" asp-action="Index" class="btn btn-success btn-lg w-100 mb-2">
+                                <i class="fas fa-list me-2"></i>View All Products
+                            </a>
+                            <small class="text-muted">Browse your inventory</small>
+                        </div>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <a asp-controller="Home" asp-action="Privacy" class="btn btn-info btn-lg w-100">
-                            <i class="fas fa-shield-alt me-2"></i>Privacy Policy
-                        </a>
+                        <div class="text-center">
+                            <a asp-controller="Home" asp-action="Privacy" class="btn btn-info btn-lg w-100 mb-2">
+                                <i class="fas fa-shield-alt me-2"></i>Privacy Policy
+                            </a>
+                            <small class="text-muted">Learn about our privacy practices</small>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Features Section -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="text-center mb-5">
+            <h2 class="text-primary">
+                <i class="fas fa-star me-2"></i>Why Choose Our System?
+            </h2>
+            <hr class="w-25 mx-auto">
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm text-center">
+            <div class="card-body">
+                <i class="fas fa-rocket fa-3x text-primary mb-3"></i>
+                <h5 class="card-title">Fast & Efficient</h5>
+                <p class="card-text">Built with modern technologies for optimal performance and user experience.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm text-center">
+            <div class="card-body">
+                <i class="fas fa-shield-alt fa-3x text-success mb-3"></i>
+                <h5 class="card-title">Secure & Reliable</h5>
+                <p class="card-text">Enterprise-grade security with data validation and error handling.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm text-center">
+            <div class="card-body">
+                <i class="fas fa-mobile-alt fa-3x text-info mb-3"></i>
+                <h5 class="card-title">Responsive Design</h5>
+                <p class="card-text">Works seamlessly across all devices - desktop, tablet, and mobile.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+    }
+    
+    .hero-section {
+        animation: fadeInUp 1s ease-out;
+    }
+    
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .price-display {
+        background: linear-gradient(45deg, #28a745, #20c997);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+</style>
+
