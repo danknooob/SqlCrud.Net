@@ -87,12 +87,6 @@
             </summary>
             <example>High-performance laptop with latest processor</example>
         </member>
-        <member name="P:SQLCRUD.Controllers.CreateProductDto.Price">
-            <summary>
-            Product price
-            </summary>
-            <example>1299.99</example>
-        </member>
         <member name="P:SQLCRUD.Controllers.CreateProductDto.Category">
             <summary>
             Product category
@@ -128,12 +122,6 @@
             </summary>
             <example>High-performance laptop with latest processor</example>
         </member>
-        <member name="P:SQLCRUD.Controllers.UpdateProductDto.Price">
-            <summary>
-            Product price
-            </summary>
-            <example>1299.99</example>
-        </member>
         <member name="P:SQLCRUD.Controllers.UpdateProductDto.Category">
             <summary>
             Product category
@@ -162,6 +150,18 @@
             <inheritdoc />
         </member>
         <member name="M:SQLCRUD.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:SQLCRUD.Migrations.RemovePriceFieldComplete">
+            <inheritdoc />
+        </member>
+        <member name="M:SQLCRUD.Migrations.RemovePriceFieldComplete.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:SQLCRUD.Migrations.RemovePriceFieldComplete.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:SQLCRUD.Migrations.RemovePriceFieldComplete.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>

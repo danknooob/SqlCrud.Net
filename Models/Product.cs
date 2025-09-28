@@ -14,8 +14,6 @@ namespace SQLCRUD.Models
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
         public string? Description { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:C}")]
-        public decimal Price { get; set; } = 0;
 
         [Required(ErrorMessage = "Category is required")]
         [StringLength(50, ErrorMessage = "Category cannot exceed 50 characters")]

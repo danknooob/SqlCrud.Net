@@ -103,15 +103,13 @@ namespace SQLCRUD.Controllers
         {
             var totalProducts = await _context.Products.CountAsync();
             var totalCategories = await _context.Products.Select(p => p.Category).Distinct().CountAsync();
-            var totalValue = await _context.Products.SumAsync(p => p.Price * p.StockQuantity);
-            var averagePrice = await _context.Products.AverageAsync(p => p.Price);
+            var activeProducts = await _context.Products.CountAsync(p => p.IsActive);
 
             return new
             {
                 TotalProducts = totalProducts,
                 TotalCategories = totalCategories,
-                TotalInventoryValue = totalValue,
-                AveragePrice = averagePrice,
+                ActiveProducts = activeProducts,
                 LastUpdated = DateTime.UtcNow
             };
         }
@@ -137,7 +135,6 @@ namespace SQLCRUD.Controllers
             {
                 Name = product.Name,
                 Description = product.Description,
-                Price = product.Price,
                 Category = product.Category,
                 StockQuantity = product.StockQuantity,
                 IsActive = product.IsActive,
@@ -178,7 +175,6 @@ namespace SQLCRUD.Controllers
 
             existingProduct.Name = product.Name;
             existingProduct.Description = product.Description;
-            existingProduct.Price = product.Price;
             existingProduct.Category = product.Category;
             existingProduct.StockQuantity = product.StockQuantity;
             existingProduct.IsActive = product.IsActive;
@@ -252,13 +248,6 @@ namespace SQLCRUD.Controllers
         [StringLength(500)]
         public string? Description { get; set; }
 
-        /// <summary>
-        /// Product price
-        /// </summary>
-        /// <example>1299.99</example>
-        [Required]
-        [Range(0.01, double.MaxValue)]
-        public decimal Price { get; set; }
 
         /// <summary>
         /// Product category
@@ -302,13 +291,6 @@ namespace SQLCRUD.Controllers
         [StringLength(500)]
         public string? Description { get; set; }
 
-        /// <summary>
-        /// Product price
-        /// </summary>
-        /// <example>1299.99</example>
-        [Required]
-        [Range(0.01, double.MaxValue)]
-        public decimal Price { get; set; }
 
         /// <summary>
         /// Product category
