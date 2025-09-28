@@ -9,19 +9,17 @@ namespace SQLCRUD.Models
         [Required(ErrorMessage = "Product name is required")]
         [StringLength(100, ErrorMessage = "Product name cannot exceed 100 characters")]
         [Display(Name = "Product Name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
         public string? Description { get; set; }
 
-        [Required(ErrorMessage = "Price is required")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
         [DisplayFormat(DataFormatString = "{0:C}")]
-        public decimal Price { get; set; }
+        public decimal Price { get; set; } = 0;
 
         [Required(ErrorMessage = "Category is required")]
         [StringLength(50, ErrorMessage = "Category cannot exceed 50 characters")]
-        public string Category { get; set; }
+        public string Category { get; set; } = string.Empty;
 
         [Range(0, int.MaxValue, ErrorMessage = "Stock quantity cannot be negative")]
         [Display(Name = "Stock Quantity")]

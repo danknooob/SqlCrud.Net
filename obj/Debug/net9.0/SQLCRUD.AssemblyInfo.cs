@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SQLCRUD")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+21d1296a32b0847b36905ba8b3a7aea1fac7fdc9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c2c29cebfeee7c584b9cbaeb09e99c29940e6dfa")]
 [assembly: System.Reflection.AssemblyProductAttribute("SQLCRUD")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SQLCRUD")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

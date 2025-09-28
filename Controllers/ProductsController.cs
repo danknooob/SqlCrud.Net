@@ -66,36 +66,33 @@ namespace SQLCRUD.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            // Prevent caching of this page to ensure fresh form every time
-            Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
-            Response.Headers["Pragma"] = "no-cache";
-            Response.Headers["Expires"] = "0";
-            
-            // Return view without any model to ensure completely empty form
-            return View();
+            return View(new Product());
         }
 
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Category,StockQuantity,IsActive")] Product product)
+        public async Task<IActionResult> Create([Bind("Name,Description,Category,StockQuantity")] Product product)
         {
             if (ModelState.IsValid)
             {
-                product.DateCreated = DateTime.Now;
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Product created successfully!";
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    product.DateCreated = DateTime.Now;
+                    product.IsActive = true; // Set to true by default
+                    _context.Add(product);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Product created successfully!";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = "Error creating product: " + ex.Message;
+                    return View(product);
+                }
             }
             
-            // Prevent caching and return completely fresh empty form
-            Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
-            Response.Headers["Pragma"] = "no-cache";
-            Response.Headers["Expires"] = "0";
-            
-            // Return view without any model to ensure completely empty form
-            return View();
+            return View(product);
         }
 
         // GET: Products/Edit/5
