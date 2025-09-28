@@ -14,20 +14,13 @@ namespace SQLCRUD.Controllers
 
         public IActionResult Index()
         {
-            var recentProducts = _context.Products
-                .Where(p => p.IsActive)
-                .OrderByDescending(p => p.DateCreated)
-                .Take(6)
-                .ToList();
-
             var totalProducts = _context.Products.Count();
             var totalCategories = _context.Products.Select(p => p.Category).Distinct().Count();
-            var totalValue = _context.Products.Sum(p => p.Price * p.StockQuantity);
+            var activeProducts = _context.Products.Count(p => p.IsActive);
 
-            ViewBag.RecentProducts = recentProducts;
             ViewBag.TotalProducts = totalProducts;
             ViewBag.TotalCategories = totalCategories;
-            ViewBag.TotalValue = totalValue;
+            ViewBag.ActiveProducts = activeProducts;
 
             return View();
         }

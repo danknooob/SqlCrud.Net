@@ -78,7 +78,7 @@ namespace SQLCRUD.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Price,Category,StockQuantity,IsActive")] Product product)
+        public async Task<IActionResult> Create([Bind("Name,Description,Category,StockQuantity,IsActive")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -117,7 +117,7 @@ namespace SQLCRUD.Controllers
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,Category,StockQuantity,DateCreated,IsActive")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Category,StockQuantity,DateCreated,IsActive")] Product product)
         {
             if (id != product.Id)
             {

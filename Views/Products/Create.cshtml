@@ -42,14 +42,6 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="productPrice" class="form-label">Price</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                                <input type="number" name="Price" id="productPrice" class="form-control" placeholder="0.00" step="0.01" autocomplete="off" />
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
                             <label for="productStock" class="form-label">Stock Quantity</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-boxes"></i></span>
@@ -88,7 +80,6 @@
         document.getElementById('productName').value = '';
         document.getElementById('productCategory').value = '';
         document.getElementById('productDescription').value = '';
-        document.getElementById('productPrice').value = '';
         document.getElementById('productStock').value = '';
         document.getElementById('productActive').checked = false;
         
@@ -97,7 +88,6 @@
             document.getElementById('productName').value = '';
             document.getElementById('productCategory').value = '';
             document.getElementById('productDescription').value = '';
-            document.getElementById('productPrice').value = '';
             document.getElementById('productStock').value = '';
             document.getElementById('productActive').checked = false;
         }, 100);

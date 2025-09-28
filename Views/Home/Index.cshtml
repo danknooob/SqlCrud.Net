@@ -3,142 +3,95 @@
 }
 
 <!-- Hero Section -->
-<div class="hero-section text-center mb-5 py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
+<div class="hero-section text-center mb-5 py-5 bg-light border rounded">
     <div class="container">
-        <h1 class="display-3 fw-bold mb-4">
-            <i class="fas fa-store me-3"></i>Product Management System
+        <h1 class="display-3 fw-bold mb-4 text-dark">
+            <i class="fas fa-store me-3 text-primary"></i>Product Management System
         </h1>
-        <p class="lead mb-4">Streamline your inventory with our powerful CRUD application built on ASP.NET MVC</p>
+        <p class="lead mb-4 text-muted">Streamline your inventory with our powerful CRUD application built on ASP.NET MVC</p>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a asp-controller="Products" asp-action="Create" class="btn btn-light btn-lg px-4">
+            <a asp-controller="Products" asp-action="Create" class="btn btn-primary btn-lg px-4">
                 <i class="fas fa-plus me-2"></i>Add Product
             </a>
-            <a asp-controller="Products" asp-action="Index" class="btn btn-outline-light btn-lg px-4">
+            <a asp-controller="Products" asp-action="Index" class="btn btn-outline-primary btn-lg px-4">
                 <i class="fas fa-list me-2"></i>View Products
             </a>
         </div>
     </div>
 </div>
 
-<!-- Statistics Cards -->
-<div class="row mb-5">
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-lg border-0 h-100" style="background: linear-gradient(45deg, #667eea, #764ba2);">
-            <div class="card-body text-center text-white">
-                <div class="mb-3">
-                    <i class="fas fa-box fa-4x opacity-75"></i>
-                </div>
-                <h2 class="card-title fw-bold">@ViewBag.TotalProducts</h2>
-                <p class="card-text fs-5">Total Products</p>
-                <small class="opacity-75">Manage your inventory</small>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-lg border-0 h-100" style="background: linear-gradient(45deg, #f093fb, #f5576c);">
-            <div class="card-body text-center text-white">
-                <div class="mb-3">
-                    <i class="fas fa-tags fa-4x opacity-75"></i>
-                </div>
-                <h2 class="card-title fw-bold">@ViewBag.TotalCategories</h2>
-                <p class="card-text fs-5">Categories</p>
-                <small class="opacity-75">Organize by type</small>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-lg border-0 h-100" style="background: linear-gradient(45deg, #4facfe, #00f2fe);">
-            <div class="card-body text-center text-white">
-                <div class="mb-3">
-                    <i class="fas fa-dollar-sign fa-4x opacity-75"></i>
-                </div>
-                <h2 class="card-title fw-bold">@(((decimal)ViewBag.TotalValue).ToString("C"))</h2>
-                <p class="card-text fs-5">Inventory Value</p>
-                <small class="opacity-75">Total worth</small>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Recent Products Section -->
-@if (ViewBag.RecentProducts != null && ((List<Product>)ViewBag.RecentProducts).Any())
+@if (ViewBag.TotalProducts > 0)
 {
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2 class="text-center mb-4">
-                <i class="fas fa-star me-2 text-warning"></i>Latest Products
-            </h2>
-            <hr class="w-50 mx-auto mb-5">
-        </div>
-    </div>
-    
-    <div class="row">
-        @foreach (var product in (List<Product>)ViewBag.RecentProducts)
-        {
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100 shadow-lg border-0 product-card" style="transition: transform 0.3s ease, box-shadow 0.3s ease;">
-                    <div class="card-header bg-gradient text-white" style="background: linear-gradient(45deg, #667eea, #764ba2);">
-                        <h5 class="card-title mb-1 fw-bold">@product.Name</h5>
-                        <small class="opacity-75">
-                            <i class="fas fa-tag me-1"></i>@product.Category
-                        </small>
+    <!-- Statistics Cards -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-box fa-4x text-primary"></i>
                     </div>
-                    <div class="card-body">
-                        <p class="card-text text-muted">
-                            @if (!string.IsNullOrEmpty(product.Description))
-                            {
-                                @(product.Description.Length > 80 ? product.Description.Substring(0, 80) + "..." : product.Description)
-                            }
-                            else
-                            {
-                                <em>No description available</em>
-                            }
-                        </p>
-                        <div class="row text-center mb-3">
-                            <div class="col-6">
-                                <div class="price-display">
-                                    <strong class="text-success fs-4">@product.Price.ToString("C")</strong>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <span class="badge bg-info fs-6 px-3 py-2">
-                                    <i class="fas fa-boxes me-1"></i>@product.StockQuantity
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-light">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">
-                                <i class="fas fa-calendar-alt me-1"></i>
-                                @product.DateCreated.ToString("MMM dd, yyyy")
-                            </small>
-                            <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" 
-                               class="btn btn-primary btn-sm">
-                                <i class="fas fa-eye me-1"></i>View Details
-                            </a>
-                        </div>
-                    </div>
+                    <h2 class="card-title fw-bold text-dark">@ViewBag.TotalProducts</h2>
+                    <p class="card-text fs-5 text-dark">Total Products</p>
+                    <small class="text-muted">Manage your inventory</small>
                 </div>
             </div>
-        }
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-tags fa-4x text-primary"></i>
+                    </div>
+                    <h2 class="card-title fw-bold text-dark">@ViewBag.TotalCategories</h2>
+                    <p class="card-text fs-5 text-dark">Categories</p>
+                    <small class="text-muted">Organize by type</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-check-circle fa-4x text-primary"></i>
+                    </div>
+                    <h2 class="card-title fw-bold text-dark">@ViewBag.ActiveProducts</h2>
+                    <p class="card-text fs-5 text-dark">Active Products</p>
+                    <small class="text-muted">Currently available</small>
+                </div>
+            </div>
+        </div>
     </div>
 }
 else
 {
-    <div class="row">
+    <!-- Empty State Alert -->
+    <div class="row mb-5">
         <div class="col-12">
-            <div class="text-center py-5">
-                <i class="fas fa-box-open fa-5x text-muted mb-4"></i>
-                <h3 class="text-muted">No Products Yet</h3>
-                <p class="lead text-muted">Start by adding your first product to see it here!</p>
-                <a asp-controller="Products" asp-action="Create" class="btn btn-primary btn-lg mt-3">
-                    <i class="fas fa-plus me-2"></i>Add Your First Product
-                </a>
+            <div class="card border-0 text-center">
+                <div class="card-body py-5">
+                    <h1 class="text-dark mb-3">No Data Available!</h1>
+                    <h3 class="text-dark mb-4">Your system is completely empty</h3>
+                    <p class="lead text-muted mb-4">
+                        <strong>You must enter product details to use this system.</strong><br>
+                        The database contains no products, categories, or inventory data.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a asp-controller="Products" asp-action="Create" class="btn btn-primary btn-lg">
+                            <i class="fas fa-plus me-2"></i>Enter Product Details Now
+                        </a>
+                        <a asp-controller="Products" asp-action="Index" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-list me-2"></i>View Empty Inventory
+                        </a>
+                    </div>
+                    <p class="mt-4 text-muted">
+                        <small><strong>Action Required:</strong> Add at least one product to start managing your inventory</small>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 }
+
 
 <!-- Quick Actions -->
 <div class="row mt-5">
@@ -242,11 +195,5 @@ else
         }
     }
     
-    .price-display {
-        background: linear-gradient(45deg, #28a745, #20c997);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
 </style>
 
