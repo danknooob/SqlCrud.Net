@@ -28,6 +28,12 @@ builder.Services.AddScoped<IProductFactory, ProductFactory>();
 builder.Services.AddScoped<ICategoryCrudFactory, CategoryCrudFactory>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
+// Register Abstract Factory Pattern Services
+builder.Services.AddScoped<IAbstractProductFactory, AbstractProductFactory>();
+builder.Services.AddScoped<IElectronicsFactory, ElectronicsFactory>();
+builder.Services.AddScoped<IFurnitureFactory, FurnitureFactory>();
+builder.Services.AddScoped<IAbstractProductService, AbstractProductService>();
+
 // Add Swagger/OpenAPI services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

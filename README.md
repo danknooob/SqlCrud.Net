@@ -1,6 +1,6 @@
 # SQL CRUD Application
 
-A modern ASP.NET Core MVC application demonstrating CRUD operations with Entity Framework Core and SQL Server LocalDB. This project features an attractive Bootstrap-based frontend and comprehensive product management functionality.
+A modern ASP.NET Core MVC application demonstrating CRUD operations with Entity Framework Core and SQLite database. This project features an attractive Bootstrap-based frontend, comprehensive product management functionality, and implements both Factory Pattern and Abstract Factory Pattern for product creation.
 
 ## 🚀 Features
 
@@ -9,17 +9,18 @@ A modern ASP.NET Core MVC application demonstrating CRUD operations with Entity 
 - **Search & Filter**: Search products by name, description, or category
 - **Data Validation**: Client and server-side validation
 - **Entity Framework Core**: Code-first approach with migrations
-- **SQL Server LocalDB**: Built-in SQL Server instance
-- **Seed Data**: Pre-populated with sample products
+- **SQLite Database**: Lightweight, file-based database
+- **Design Patterns**: Factory Pattern and Abstract Factory Pattern implementation
+- **Category-Based Management**: Organized product management by categories
 - **Swagger/OpenAPI**: Complete API documentation with interactive testing
 - **RESTful API**: Dedicated API endpoints for programmatic access
 
 ## 🛠️ Technologies Used
 
-- **.NET 8.0**
+- **.NET 9.0**
 - **ASP.NET Core MVC**
-- **Entity Framework Core 8.0**
-- **SQL Server LocalDB**
+- **Entity Framework Core 9.0**
+- **SQLite Database**
 - **Bootstrap 5.3.2**
 - **Font Awesome 6.4.0**
 - **jQuery & jQuery Validation**
@@ -30,9 +31,9 @@ A modern ASP.NET Core MVC application demonstrating CRUD operations with Entity 
 
 Before running this application, make sure you have the following installed:
 
-- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/) or [Visual Studio Code](https://code.visualstudio.com/)
-- [SQL Server LocalDB](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb) (usually comes with Visual Studio)
+- No additional database setup required (uses SQLite)
 
 ## 🚀 Getting Started
 
@@ -72,9 +73,9 @@ dotnet run
 ```
 
 The application will be available at:
-- HTTP: `http://localhost:5000`
+- HTTP: `http://localhost:50001`
 - HTTPS: `https://localhost:7000`
-- **Swagger API Documentation**: `http://localhost:5000/api-docs` or `https://localhost:7000/api-docs`
+- **Swagger API Documentation**: `http://localhost:50001/api-docs` or `https://localhost:7000/api-docs`
 
 ## 📁 Project Structure
 
@@ -87,7 +88,23 @@ SQLCRUD/
 ├── Data/                 # Entity Framework DbContext
 │   └── ApplicationDbContext.cs
 ├── Models/               # Data Models
-│   └── Product.cs
+│   ├── Product.cs
+│   └── ProductDto.cs
+├── Interfaces/           # Design Pattern Interfaces
+│   ├── IProductService.cs
+│   ├── IProductFactory.cs
+│   ├── ICategoryCrudFactory.cs
+│   ├── IAbstractProductFactory.cs
+│   └── IAbstractProductService.cs
+├── Factories/            # Factory Pattern Implementation
+│   ├── ProductFactory.cs
+│   ├── CategoryCrudFactory.cs
+│   ├── AbstractProductFactory.cs
+│   ├── ElectronicsFactory.cs
+│   └── FurnitureFactory.cs
+├── Services/             # Business Logic Services
+│   ├── ProductService.cs
+│   └── AbstractProductService.cs
 ├── Filters/              # Swagger Filters
 │   └── ExampleSchemaFilter.cs
 ├── Views/                # Razor Views
@@ -98,6 +115,7 @@ SQLCRUD/
 │   ├── css/
 │   ├── js/
 │   └── lib/
+├── Migrations/           # Entity Framework Migrations
 ├── Properties/
 │   └── launchSettings.json
 ├── Program.cs            # Application Entry Point
@@ -107,8 +125,21 @@ SQLCRUD/
 
 ## 🎯 Key Features Explained
 
+### Design Patterns Implementation
+
+#### Factory Pattern
+- **CategoryCrudFactory**: Handles CRUD operations for different product categories
+- **ProductFactory**: Creates products with consistent structure
+- **Category-based Operations**: Electronics, Furniture, Automobile, and Others
+
+#### Abstract Factory Pattern
+- **AbstractProductFactory**: Creates factories for different product families
+- **ElectronicsFactory**: Creates mobile phones, laptops, and headphones
+- **FurnitureFactory**: Creates sofas, tables, beds, and curtains
+- **Specialized Product Creation**: Each product type has unique characteristics and emoji prefixes
+
 ### Product Management
-- **Create**: Add new products with validation
+- **Create**: Add new products with validation using Factory patterns
 - **Read**: View all products with search and filtering
 - **Update**: Edit existing product information
 - **Delete**: Remove products with confirmation
@@ -152,11 +183,12 @@ The `Product` model includes:
 - `Id` (Primary Key)
 - `Name` (Required, Max 100 chars)
 - `Description` (Optional, Max 500 chars)
-- `Price` (Required, Decimal)
 - `Category` (Required, Max 50 chars)
 - `StockQuantity` (Integer, Min 0)
 - `DateCreated` (DateTime)
 - `IsActive` (Boolean)
+
+**Note**: The Price field was removed in a recent update to simplify the model.
 
 ## 🎨 UI Components
 
@@ -178,23 +210,23 @@ The `Product` model includes:
 ## 🔧 Configuration
 
 ### Connection String
-The application uses SQL Server LocalDB by default:
+The application uses SQLite by default:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=SQLCRUDDb;Trusted_Connection=true;MultipleActiveResultSets=true"
+    "DefaultConnection": "Data Source=SQLCRUD_Dev.db"
   }
 }
 ```
 
 ### Environment Settings
-- Development: Uses `SQLCRUDDb_Dev` database
-- Production: Uses `SQLCRUDDb` database
+- Development: Uses `SQLCRUD_Dev.db` database file
+- Production: Uses `SQLCRUD.db` database file
 
 ## 🔧 Using the API
 
 ### Swagger UI
-1. Navigate to `http://localhost:5000/api-docs` in your browser
+1. Navigate to `http://localhost:50001/api-docs` in your browser
 2. Explore the interactive API documentation
 3. Click "Try it out" on any endpoint to test it
 4. Use the provided examples or create your own requests
@@ -203,17 +235,16 @@ The application uses SQL Server LocalDB by default:
 
 #### Get All Products
 ```bash
-curl -X GET "http://localhost:5000/api/products" -H "accept: application/json"
+curl -X GET "http://localhost:50001/api/products" -H "accept: application/json"
 ```
 
 #### Create a New Product
 ```bash
-curl -X POST "http://localhost:5000/api/products" \
+curl -X POST "http://localhost:50001/api/products" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "New Product",
     "description": "Product description",
-    "price": 99.99,
     "category": "Electronics",
     "stockQuantity": 10,
     "isActive": true
@@ -222,12 +253,12 @@ curl -X POST "http://localhost:5000/api/products" \
 
 #### Search Products
 ```bash
-curl -X GET "http://localhost:5000/api/products?searchString=laptop&categoryFilter=Electronics"
+curl -X GET "http://localhost:50001/api/products?searchString=laptop&categoryFilter=Electronics"
 ```
 
 #### Get Product Statistics
 ```bash
-curl -X GET "http://localhost:5000/api/products/statistics"
+curl -X GET "http://localhost:50001/api/products/statistics"
 ```
 
 ## 🚀 Deployment
@@ -289,6 +320,24 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Font Awesome for the beautiful icons
 - Microsoft for ASP.NET Core and Entity Framework
 - The .NET community for excellent documentation
+
+## 🔧 Recent Updates & Fixes
+
+### Version 2.0 - Design Patterns Implementation
+- ✅ **Factory Pattern**: Implemented CategoryCrudFactory for category-based operations
+- ✅ **Abstract Factory Pattern**: Added AbstractProductFactory for specialized product creation
+- ✅ **SQLite Migration**: Switched from SQL Server LocalDB to SQLite for easier deployment
+- ✅ **View Fixes**: Resolved CreateHeadphones and other create endpoints
+- ✅ **Generic Views**: Implemented CreateAbstractProduct view for all product types
+- ✅ **Category Management**: Enhanced category selection and management interface
+- ✅ **Product Types**: Added specialized creation for Electronics and Furniture products
+- ✅ **Port Configuration**: Updated to use port 50001 for HTTP and 7000 for HTTPS
+
+### Bug Fixes
+- Fixed CreateHeadphones endpoint returning 404 error
+- Resolved file locking issues during development
+- Updated all create action methods to use generic view
+- Improved error handling and user feedback
 
 ## 📞 Support
 

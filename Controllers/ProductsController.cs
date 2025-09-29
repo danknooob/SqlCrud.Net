@@ -8,11 +8,13 @@ namespace SQLCRUD.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICategoryCrudFactory _categoryCrudFactory;
+        private readonly IAbstractProductService _abstractProductService;
 
-        public ProductsController(IProductService productService, ICategoryCrudFactory categoryCrudFactory)
+        public ProductsController(IProductService productService, ICategoryCrudFactory categoryCrudFactory, IAbstractProductService abstractProductService)
         {
             _productService = productService;
             _categoryCrudFactory = categoryCrudFactory;
+            _abstractProductService = abstractProductService;
         }
 
         // GET: Products - Redirect to category selection
@@ -174,6 +176,208 @@ namespace SQLCRUD.Controllers
             }
 
             return RedirectToAction(nameof(CategoryIndex), new { category });
+        }
+
+        // ===== ABSTRACT FACTORY PATTERN OPERATIONS =====
+
+        // Electronics Abstract Factory Actions
+        public async Task<IActionResult> ElectronicsAbstract()
+        {
+            var products = await _abstractProductService.GetElectronicsProductsAsync();
+            ViewBag.Category = "Electronics";
+            ViewBag.FactoryType = "Abstract Factory";
+            return View(products);
+        }
+
+        public IActionResult CreateMobilePhone()
+        {
+            ViewBag.ProductType = "Mobile Phone";
+            ViewBag.Category = "Electronics";
+            return View("CreateAbstractProduct");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateMobilePhone(string name, string description, int stockQuantity)
+        {
+            try
+            {
+                await _abstractProductService.CreateMobilePhoneAsync(name, description, stockQuantity);
+                TempData["SuccessMessage"] = "Mobile Phone created successfully using Abstract Factory!";
+                return RedirectToAction(nameof(ElectronicsAbstract));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error creating mobile phone: " + ex.Message;
+                ViewBag.ProductType = "Mobile Phone";
+                ViewBag.Category = "Electronics";
+                return View();
+            }
+        }
+
+        public IActionResult CreateLaptop()
+        {
+            ViewBag.ProductType = "Laptop";
+            ViewBag.Category = "Electronics";
+            return View("CreateAbstractProduct");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateLaptop(string name, string description, int stockQuantity)
+        {
+            try
+            {
+                await _abstractProductService.CreateLaptopAsync(name, description, stockQuantity);
+                TempData["SuccessMessage"] = "Laptop created successfully using Abstract Factory!";
+                return RedirectToAction(nameof(ElectronicsAbstract));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error creating laptop: " + ex.Message;
+                ViewBag.ProductType = "Laptop";
+                ViewBag.Category = "Electronics";
+                return View();
+            }
+        }
+
+        public IActionResult CreateHeadphones()
+        {
+            ViewBag.ProductType = "Headphones";
+            ViewBag.Category = "Electronics";
+            return View("CreateAbstractProduct");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateHeadphones(string name, string description, int stockQuantity)
+        {
+            try
+            {
+                await _abstractProductService.CreateHeadphonesAsync(name, description, stockQuantity);
+                TempData["SuccessMessage"] = "Headphones created successfully using Abstract Factory!";
+                return RedirectToAction(nameof(ElectronicsAbstract));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error creating headphones: " + ex.Message;
+                ViewBag.ProductType = "Headphones";
+                ViewBag.Category = "Electronics";
+                return View();
+            }
+        }
+
+        // Furniture Abstract Factory Actions
+        public async Task<IActionResult> FurnitureAbstract()
+        {
+            var products = await _abstractProductService.GetFurnitureProductsAsync();
+            ViewBag.Category = "Furniture";
+            ViewBag.FactoryType = "Abstract Factory";
+            return View(products);
+        }
+
+        public IActionResult CreateSofa()
+        {
+            ViewBag.ProductType = "Sofa";
+            ViewBag.Category = "Furniture";
+            return View("CreateAbstractProduct");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateSofa(string name, string description, int stockQuantity)
+        {
+            try
+            {
+                await _abstractProductService.CreateSofaAsync(name, description, stockQuantity);
+                TempData["SuccessMessage"] = "Sofa created successfully using Abstract Factory!";
+                return RedirectToAction(nameof(FurnitureAbstract));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error creating sofa: " + ex.Message;
+                ViewBag.ProductType = "Sofa";
+                ViewBag.Category = "Furniture";
+                return View();
+            }
+        }
+
+        public IActionResult CreateTable()
+        {
+            ViewBag.ProductType = "Table";
+            ViewBag.Category = "Furniture";
+            return View("CreateAbstractProduct");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateTable(string name, string description, int stockQuantity)
+        {
+            try
+            {
+                await _abstractProductService.CreateTableAsync(name, description, stockQuantity);
+                TempData["SuccessMessage"] = "Table created successfully using Abstract Factory!";
+                return RedirectToAction(nameof(FurnitureAbstract));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error creating table: " + ex.Message;
+                ViewBag.ProductType = "Table";
+                ViewBag.Category = "Furniture";
+                return View();
+            }
+        }
+
+        public IActionResult CreateBed()
+        {
+            ViewBag.ProductType = "Bed";
+            ViewBag.Category = "Furniture";
+            return View("CreateAbstractProduct");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateBed(string name, string description, int stockQuantity)
+        {
+            try
+            {
+                await _abstractProductService.CreateBedAsync(name, description, stockQuantity);
+                TempData["SuccessMessage"] = "Bed created successfully using Abstract Factory!";
+                return RedirectToAction(nameof(FurnitureAbstract));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error creating bed: " + ex.Message;
+                ViewBag.ProductType = "Bed";
+                ViewBag.Category = "Furniture";
+                return View();
+            }
+        }
+
+        public IActionResult CreateCurtains()
+        {
+            ViewBag.ProductType = "Curtains";
+            ViewBag.Category = "Furniture";
+            return View("CreateAbstractProduct");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateCurtains(string name, string description, int stockQuantity)
+        {
+            try
+            {
+                await _abstractProductService.CreateCurtainsAsync(name, description, stockQuantity);
+                TempData["SuccessMessage"] = "Curtains created successfully using Abstract Factory!";
+                return RedirectToAction(nameof(FurnitureAbstract));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error creating curtains: " + ex.Message;
+                ViewBag.ProductType = "Curtains";
+                ViewBag.Category = "Furniture";
+                return View();
+            }
         }
     }
 }
