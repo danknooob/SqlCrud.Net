@@ -25,6 +25,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Register Factory Pattern Services
 builder.Services.AddScoped<IProductFactory, ProductFactory>();
+builder.Services.AddScoped<ICategoryCrudFactory, CategoryCrudFactory>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
 // Add Swagger/OpenAPI services

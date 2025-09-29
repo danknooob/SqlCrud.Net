@@ -8,13 +8,47 @@
         <h1 class="display-3 fw-bold mb-4 text-dark">
             <i class="fas fa-store me-3 text-primary"></i>Product Management System
         </h1>
-        <p class="lead mb-4 text-muted">Streamline your inventory with our powerful CRUD application built on ASP.NET MVC</p>
+        <p class="lead mb-4 text-muted">Streamline your inventory with our powerful Factory Design Pattern CRUD application built on ASP.NET MVC</p>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a asp-controller="Products" asp-action="Create" class="btn btn-primary btn-lg px-4">
-                <i class="fas fa-plus me-2"></i>Add Product
-            </a>
-            <a asp-controller="Products" asp-action="Index" class="btn btn-outline-primary btn-lg px-4">
-                <i class="fas fa-list me-2"></i>View Products
+            <div class="btn-group" role="group">
+                <a asp-controller="Products" asp-action="CategorySelection" class="btn btn-primary btn-lg px-4">
+                    <i class="fas fa-cogs me-2"></i>Factory Pattern
+                </a>
+                <button type="button" class="btn btn-primary btn-lg dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><h6 class="dropdown-header">Add Product</h6></li>
+                    <li><a class="dropdown-item" asp-controller="Products" asp-action="CategoryIndex" asp-route-category="Electronics">
+                        <i class="fas fa-microchip me-2"></i>Add Electronics
+                    </a></li>
+                    <li><a class="dropdown-item" asp-controller="Products" asp-action="CategoryIndex" asp-route-category="Furniture">
+                        <i class="fas fa-couch me-2"></i>Add Furniture
+                    </a></li>
+                    <li><a class="dropdown-item" asp-controller="Products" asp-action="CategoryIndex" asp-route-category="Automobile">
+                        <i class="fas fa-car me-2"></i>Add Automobile
+                    </a></li>
+                    <li><a class="dropdown-item" asp-controller="Products" asp-action="CategoryIndex" asp-route-category="Others">
+                        <i class="fas fa-box me-2"></i>Add Others
+                    </a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><h6 class="dropdown-header">View Products</h6></li>
+                    <li><a class="dropdown-item" asp-controller="Products" asp-action="CategoryIndex" asp-route-category="Electronics">
+                        <i class="fas fa-list me-2"></i>View Electronics
+                    </a></li>
+                    <li><a class="dropdown-item" asp-controller="Products" asp-action="CategoryIndex" asp-route-category="Furniture">
+                        <i class="fas fa-list me-2"></i>View Furniture
+                    </a></li>
+                    <li><a class="dropdown-item" asp-controller="Products" asp-action="CategoryIndex" asp-route-category="Automobile">
+                        <i class="fas fa-list me-2"></i>View Automobile
+                    </a></li>
+                    <li><a class="dropdown-item" asp-controller="Products" asp-action="CategoryIndex" asp-route-category="Others">
+                        <i class="fas fa-list me-2"></i>View Others
+                    </a></li>
+                </ul>
+            </div>
+            <a asp-controller="Products" asp-action="CategorySelection" class="btn btn-outline-primary btn-lg px-4">
+                <i class="fas fa-list me-2"></i>View All Products
             </a>
         </div>
     </div>
@@ -76,11 +110,11 @@ else
                         The database contains no products, categories, or inventory data.
                     </p>
                     <div class="d-flex justify-content-center gap-3 flex-wrap">
-                        <a asp-controller="Products" asp-action="Create" class="btn btn-primary btn-lg">
-                            <i class="fas fa-plus me-2"></i>Enter Product Details Now
+                        <a asp-controller="Products" asp-action="CategorySelection" class="btn btn-primary btn-lg">
+                            <i class="fas fa-cogs me-2"></i>Start with Factory Pattern
                         </a>
-                        <a asp-controller="Products" asp-action="Index" class="btn btn-outline-primary btn-lg">
-                            <i class="fas fa-list me-2"></i>View Empty Inventory
+                        <a asp-controller="Products" asp-action="CategoryIndex" asp-route-category="Electronics" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-microchip me-2"></i>Add Electronics
                         </a>
                     </div>
                     <p class="mt-4 text-muted">
@@ -107,18 +141,18 @@ else
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <div class="text-center">
-                            <a asp-controller="Products" asp-action="Create" class="btn btn-primary btn-lg w-100 mb-2">
-                                <i class="fas fa-plus me-2"></i>Add New Product
+                            <a asp-controller="Products" asp-action="CategorySelection" class="btn btn-primary btn-lg w-100 mb-2">
+                                <i class="fas fa-cogs me-2"></i>Factory Pattern
                             </a>
-                            <small class="text-muted">Create a new product entry</small>
+                            <small class="text-muted">Choose category to manage products</small>
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">
                         <div class="text-center">
-                            <a asp-controller="Products" asp-action="Index" class="btn btn-success btn-lg w-100 mb-2">
-                                <i class="fas fa-list me-2"></i>View All Products
+                            <a asp-controller="Products" asp-action="CategoryIndex" asp-route-category="Electronics" class="btn btn-success btn-lg w-100 mb-2">
+                                <i class="fas fa-microchip me-2"></i>Electronics CRUD
                             </a>
-                            <small class="text-muted">Browse your inventory</small>
+                            <small class="text-muted">Manage electronics products</small>
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">

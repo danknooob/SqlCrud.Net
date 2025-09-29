@@ -1,0 +1,151 @@
+@model Product
+
+@{
+    ViewData["Title"] = $"Delete {ViewBag.Category} Product";
+    var category = ViewBag.Category as string;
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h2 class="mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Delete @category Product
+                </h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-warning me-2"></i>
+                    <strong>Are you sure you want to delete this @category.ToLower() product?</strong>
+                    <br>This action cannot be undone.
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4>Product Details</h4>
+                        <div class="table-responsive">
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Product ID:</strong></td>
+                                        <td>@Model.Id</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Name:</strong></td>
+                                        <td>@Model.Name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Category:</strong></td>
+                                        <td>
+                                            <span class="badge @(category?.ToLower() switch {
+                                                "electronics" => "bg-primary",
+                                                "furniture" => "bg-warning text-dark", 
+                                                "automobile" => "bg-danger",
+                                                "others" => "bg-secondary",
+                                                _ => "bg-info"
+                                            }) fs-6">@Model.Category</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Description:</strong></td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(Model.Description))
+                                            {
+                                                @Model.Description
+                                            }
+                                            else
+                                            {
+                                                <em>No description provided</em>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Stock Quantity:</strong></td>
+                                        <td>@Model.StockQuantity</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Date Created:</strong></td>
+                                        <td>@Model.DateCreated.ToString("MMMM dd, yyyy 'at' h:mm tt")</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Status:</strong></td>
+                                        <td>
+                                            @if (Model.IsActive)
+                                            {
+                                                <span class="badge bg-success fs-6">
+                                                    <i class="fas fa-check me-1"></i>Active
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger fs-6">
+                                                    <i class="fas fa-times me-1"></i>Inactive
+                                                </span>
+                                            }
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                @switch (category?.ToLower())
+                                {
+                                    case "electronics":
+                                        <i class="fas fa-microchip fa-4x text-primary mb-3"></i>
+                                        break;
+                                    case "furniture":
+                                        <i class="fas fa-couch fa-4x text-warning mb-3"></i>
+                                        break;
+                                    case "automobile":
+                                        <i class="fas fa-car fa-4x text-danger mb-3"></i>
+                                        break;
+                                    case "others":
+                                        <i class="fas fa-box fa-4x text-secondary mb-3"></i>
+                                        break;
+                                    default:
+                                        <i class="fas fa-tag fa-4x text-info mb-3"></i>
+                                        break;
+                                }
+                                <h5>@category Product</h5>
+                                <hr>
+                                <div class="mb-3">
+                                    <strong>Days Since Created:</strong><br>
+                                    <span class="text-info fs-5">@((DateTime.Now - Model.DateCreated).Days)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-light">
+                <form asp-action="CategoryDelete" asp-route-category="@category" asp-route-id="@Model.Id" method="post">
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="CategoryIndex" asp-route-category="@category" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Back to @category Products
+                        </a>
+                        <div>
+                            <a asp-action="CategoryDetails" asp-route-category="@category" asp-route-id="@Model.Id" class="btn btn-info me-2">
+                                <i class="fas fa-eye me-1"></i>View Details
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i>Delete @category Product
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

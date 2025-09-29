@@ -1,0 +1,121 @@
+@model Product
+
+@{
+    ViewData["Title"] = $"Edit {ViewBag.Category} Product";
+    var category = ViewBag.Category as string;
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header @(category?.ToLower() switch {
+                "electronics" => "bg-primary text-white",
+                "furniture" => "bg-warning text-dark", 
+                "automobile" => "bg-danger text-white",
+                "others" => "bg-secondary text-white",
+                _ => "bg-info text-white"
+            })">
+                <h2 class="mb-0">
+                    @switch (category?.ToLower())
+                    {
+                        case "electronics":
+                            <i class="fas fa-microchip me-2"></i>
+                            break;
+                        case "furniture":
+                            <i class="fas fa-couch me-2"></i>
+                            break;
+                        case "automobile":
+                            <i class="fas fa-car me-2"></i>
+                            break;
+                        case "others":
+                            <i class="fas fa-box me-2"></i>
+                            break;
+                        default:
+                            <i class="fas fa-tag me-2"></i>
+                            break;
+                    }
+                    Edit @category Product
+                </h2>
+            </div>
+            <div class="card-body">
+                <form asp-action="CategoryEdit" asp-route-category="@category" asp-route-id="@Model.Id" method="post">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="@Model.Name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3">@Model.Description</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="stockQuantity" class="form-label">Stock Quantity</label>
+                        <input type="number" class="form-control" id="stockQuantity" name="stockQuantity" value="@Model.StockQuantity" min="0" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="form-check">
+                            <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                            <label asp-for="IsActive" class="form-check-label">
+                                <i class="fas fa-check-circle me-1"></i>Product is active
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Created:</strong> @Model.DateCreated.ToString("MMMM dd, yyyy 'at' h:mm tt")
+                        <br><strong>Category:</strong> @Model.Category (Cannot be changed)
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="CategoryIndex" asp-route-category="@category" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Back to @category Products
+                        </a>
+                        <div>
+                            <a asp-action="CategoryDetails" asp-route-category="@category" asp-route-id="@Model.Id" class="btn btn-info me-2">
+                                <i class="fas fa-eye me-1"></i>View Details
+                            </a>
+                            <button type="submit" class="btn @(category?.ToLower() switch {
+                                "electronics" => "btn-primary",
+                                "furniture" => "btn-warning", 
+                                "automobile" => "btn-danger",
+                                "others" => "btn-secondary",
+                                _ => "btn-info"
+                            })">
+                                @switch (category?.ToLower())
+                                {
+                                    case "electronics":
+                                        <i class="fas fa-microchip me-1"></i>
+                                        break;
+                                    case "furniture":
+                                        <i class="fas fa-couch me-1"></i>
+                                        break;
+                                    case "automobile":
+                                        <i class="fas fa-car me-1"></i>
+                                        break;
+                                    case "others":
+                                        <i class="fas fa-box me-1"></i>
+                                        break;
+                                    default:
+                                        <i class="fas fa-save me-1"></i>
+                                        break;
+                                }
+                                Update @category Product
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

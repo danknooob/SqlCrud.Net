@@ -1,0 +1,119 @@
+@{
+    ViewData["Title"] = $"Create {ViewBag.Category} Product";
+    var category = ViewBag.Category as string;
+}
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header @(category?.ToLower() switch {
+                "electronics" => "bg-primary text-white",
+                "furniture" => "bg-warning text-dark", 
+                "automobile" => "bg-danger text-white",
+                "others" => "bg-secondary text-white",
+                _ => "bg-info text-white"
+            })">
+                <h2 class="mb-0">
+                    @switch (category?.ToLower())
+                    {
+                        case "electronics":
+                            <i class="fas fa-microchip me-2"></i>
+                            break;
+                        case "furniture":
+                            <i class="fas fa-couch me-2"></i>
+                            break;
+                        case "automobile":
+                            <i class="fas fa-car me-2"></i>
+                            break;
+                        case "others":
+                            <i class="fas fa-box me-2"></i>
+                            break;
+                        default:
+                            <i class="fas fa-tag me-2"></i>
+                            break;
+                    }
+                    Create @category Product
+                </h2>
+            </div>
+            <div class="card-body">
+                <form asp-action="CategoryCreate" asp-route-category="@category" method="post">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required 
+                               placeholder="@(category?.ToLower() switch {
+                                   "electronics" => "e.g., iPhone 15, Gaming Laptop, Smart TV",
+                                   "furniture" => "e.g., Office Chair, Dining Table, Sofa Set",
+                                   "automobile" => "e.g., Toyota Camry, Honda Civic, BMW X5",
+                                   "others" => "e.g., Sports Equipment, Kitchen Utensils, Books",
+                                   _ => "Enter product name"
+                               })">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" 
+                                  placeholder="Describe the @category.ToLower()..."></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="stockQuantity" class="form-label">Stock Quantity</label>
+                        <input type="number" class="form-control" id="stockQuantity" name="stockQuantity" min="0" required>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        This will create a <strong>@category</strong> product using the Factory Design Pattern.
+                        @switch (category?.ToLower())
+                        {
+                            case "electronics":
+                                <br><small>Electronics products will have "🔌 Electronic device:" prefix added to description.</small>
+                                break;
+                            case "furniture":
+                                <br><small>Furniture products will have "🪑 Furniture item:" prefix added to description.</small>
+                                break;
+                            case "automobile":
+                                <br><small>Automobile products will have "🚗 Automobile:" prefix added to description.</small>
+                                break;
+                            case "others":
+                                <br><small>Other products will have "📦 Other item:" prefix added to description.</small>
+                                break;
+                        }
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="CategoryIndex" asp-route-category="@category" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Back to @category Products
+                        </a>
+                        <button type="submit" class="btn @(category?.ToLower() switch {
+                            "electronics" => "btn-primary",
+                            "furniture" => "btn-warning", 
+                            "automobile" => "btn-danger",
+                            "others" => "btn-secondary",
+                            _ => "btn-info"
+                        })">
+                            @switch (category?.ToLower())
+                            {
+                                case "electronics":
+                                    <i class="fas fa-microchip me-1"></i>
+                                    break;
+                                case "furniture":
+                                    <i class="fas fa-couch me-1"></i>
+                                    break;
+                                case "automobile":
+                                    <i class="fas fa-car me-1"></i>
+                                    break;
+                                case "others":
+                                    <i class="fas fa-box me-1"></i>
+                                    break;
+                                default:
+                                    <i class="fas fa-plus me-1"></i>
+                                    break;
+                            }
+                            Create @category Product
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

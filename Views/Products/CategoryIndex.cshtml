@@ -1,0 +1,171 @@
+@model IEnumerable<Product>
+
+@{
+    ViewData["Title"] = $"{ViewBag.Category} Products";
+    var category = ViewBag.Category as string;
+    var categoryCounts = ViewBag.CategoryCounts as Dictionary<string, int>;
+}
+
+<!-- @if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>@TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+} -->
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Header Section -->
+        <div class="col-12 mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-4 fw-bold text-primary">
+                        @switch (category?.ToLower())
+                        {
+                            case "electronics":
+                                <i class="fas fa-microchip me-3"></i>
+                                break;
+                            case "furniture":
+                                <i class="fas fa-couch me-3"></i>
+                                break;
+                            case "automobile":
+                                <i class="fas fa-car me-3"></i>
+                                break;
+                            case "others":
+                                <i class="fas fa-box me-3"></i>
+                                break;
+                            default:
+                                <i class="fas fa-tag me-3"></i>
+                                break;
+                        }
+                        @category Products
+                    </h1>
+                    <p class="lead text-muted">Factory-based CRUD operations for @category category</p>
+                </div>
+                <div class="btn-group" role="group">
+                    <a asp-action="CategoryCreate" asp-route-category="@category" class="btn btn-success btn-lg px-4">
+                        <i class="fas fa-plus me-2"></i>Add @category Product
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                        <i class="fas fa-arrow-left me-2"></i>All Products
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Statistics -->
+        @if (categoryCounts != null && categoryCounts.Any())
+        {
+            <div class="col-12 mb-4">
+                <div class="row">
+                    @foreach (var count in categoryCounts)
+                    {
+                        <div class="col-md-3 mb-3">
+                            <div class="card @(count.Key == category ? "border-primary" : "border-secondary")">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">@count.Key</h5>
+                                    <h2 class="text-primary">@count.Value</h2>
+                                    <small class="text-muted">products</small>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <!-- Products Section -->
+        <div class="col-12">
+            <div class="products-section">
+                @if (Model.Any())
+                {
+                    <div class="products-grid">
+                        @foreach (var item in Model)
+                        {
+                            <div class="product-block">
+                                <div class="block-header">
+                                    <h3 class="product-name">@item.Name</h3>
+                                    <span class="product-category">@item.Category</span>
+                                </div>
+                                
+                                <div class="block-content">
+                                    <div class="description-section">
+                                        @if (!string.IsNullOrEmpty(item.Description))
+                                        {
+                                            <p class="product-description">@item.Description</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="no-description">NO DESCRIPTION</p>
+                                        }
+                                    </div>
+                                    
+                                    <div class="stock-section">
+                                        <div class="stock-quantity">
+                                            <i class="fas fa-boxes me-1"></i>@item.StockQuantity units
+                                        </div>
+                                        <div class="stock-status">In Stock</div>
+                                    </div>
+                                    
+                                    <div class="date-section">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>Created: @item.DateCreated.ToString("MMM dd, yyyy")</span>
+                                    </div>
+                                    
+                                    <div class="status-section">
+                                        <span class="status-badge @(item.IsActive ? "active" : "inactive")">
+                                            @(item.IsActive ? "Active" : "Inactive")
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="block-actions">
+                                    <a asp-action="CategoryDetails" asp-route-category="@category" asp-route-id="@item.Id" class="action-link">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                    <a asp-action="CategoryEdit" asp-route-category="@category" asp-route-id="@item.Id" class="action-link">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a asp-action="CategoryDelete" asp-route-category="@category" asp-route-id="@item.Id" class="action-link">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="no-products text-center py-5">
+                        <div class="card border-0">
+                            <div class="card-body">
+                                <h1 class="text-dark mb-3">No @category Products Available</h1>
+                                <h3 class="text-dark mb-4">This category is currently empty!</h3>
+                                <p class="lead text-muted mb-4">
+                                    <strong>Please add @category products to get started.</strong><br>
+                                    Click the button below to create your first @category product.
+                                </p>
+                                <a asp-action="CategoryCreate" asp-route-category="@category" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-plus me-2"></i>Add @category Product
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
