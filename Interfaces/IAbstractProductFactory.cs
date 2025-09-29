@@ -7,6 +7,7 @@ namespace SQLCRUD.Interfaces
     {
         IElectronicsFactory CreateElectronicsFactory();
         IFurnitureFactory CreateFurnitureFactory();
+        IAutomobileFactory CreateAutomobileFactory();
     }
 
     // Electronics Factory Interface
@@ -24,5 +25,13 @@ namespace SQLCRUD.Interfaces
         Product CreateTable(string name, string description, int stockQuantity);
         Product CreateBed(string name, string description, int stockQuantity);
         Product CreateCurtains(string name, string description, int stockQuantity);
+    }
+
+    // Automobile Factory Interface
+    public interface IAutomobileFactory
+    {
+        Product CreateCar(string name, string description, int stockQuantity);
+        Product CreateTruck(string name, string description, int stockQuantity);
+        Product CreateBike(string name, string description, int stockQuantity);
     }
 }

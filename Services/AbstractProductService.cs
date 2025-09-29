@@ -81,6 +81,34 @@ namespace SQLCRUD.Services
             return product;
         }
 
+        // Automobile Operations
+        public async Task<Product> CreateCarAsync(string name, string description, int stockQuantity)
+        {
+            var automobileFactory = _abstractFactory.CreateAutomobileFactory();
+            var product = automobileFactory.CreateCar(name, description, stockQuantity);
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+            return product;
+        }
+
+        public async Task<Product> CreateTruckAsync(string name, string description, int stockQuantity)
+        {
+            var automobileFactory = _abstractFactory.CreateAutomobileFactory();
+            var product = automobileFactory.CreateTruck(name, description, stockQuantity);
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+            return product;
+        }
+
+        public async Task<Product> CreateBikeAsync(string name, string description, int stockQuantity)
+        {
+            var automobileFactory = _abstractFactory.CreateAutomobileFactory();
+            var product = automobileFactory.CreateBike(name, description, stockQuantity);
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+            return product;
+        }
+
         // Get products by specific type
         public async Task<IEnumerable<Product>> GetElectronicsProductsAsync()
         {
@@ -94,6 +122,14 @@ namespace SQLCRUD.Services
         {
             return await _context.Products
                 .Where(p => p.Category == "Furniture")
+                .OrderBy(p => p.Name)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetAutomobileProductsAsync()
+        {
+            return await _context.Products
+                .Where(p => p.Category == "Automobile")
                 .OrderBy(p => p.Name)
                 .ToListAsync();
         }
@@ -150,6 +186,30 @@ namespace SQLCRUD.Services
         {
             return await _context.Products
                 .Where(p => p.Category == "Furniture" && p.Description.Contains("🪟 Curtains:"))
+                .OrderBy(p => p.Name)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetCarsAsync()
+        {
+            return await _context.Products
+                .Where(p => p.Category == "Automobile" && p.Description.Contains("🚗 Car:"))
+                .OrderBy(p => p.Name)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetTrucksAsync()
+        {
+            return await _context.Products
+                .Where(p => p.Category == "Automobile" && p.Description.Contains("🚛 Truck:"))
+                .OrderBy(p => p.Name)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetBikesAsync()
+        {
+            return await _context.Products
+                .Where(p => p.Category == "Automobile" && p.Description.Contains("🏍️ Bike:"))
                 .OrderBy(p => p.Name)
                 .ToListAsync();
         }

@@ -361,6 +361,93 @@ namespace SQLCRUD.Controllers
             return View("CreateAbstractProduct");
         }
 
+        // Automobile Abstract Factory Actions
+        public async Task<IActionResult> AutomobileAbstract()
+        {
+            var products = await _abstractProductService.GetAutomobileProductsAsync();
+            ViewBag.Category = "Automobile";
+            ViewBag.FactoryType = "Abstract Factory";
+            return View(products);
+        }
+
+        public IActionResult CreateCar()
+        {
+            ViewBag.ProductType = "Car";
+            ViewBag.Category = "Automobile";
+            return View("CreateAbstractProduct");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateCar(string name, string description, int stockQuantity)
+        {
+            try
+            {
+                await _abstractProductService.CreateCarAsync(name, description, stockQuantity);
+                TempData["SuccessMessage"] = "Car created successfully using Abstract Factory!";
+                return RedirectToAction(nameof(AutomobileAbstract));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error creating car: " + ex.Message;
+                ViewBag.ProductType = "Car";
+                ViewBag.Category = "Automobile";
+                return View("CreateAbstractProduct");
+            }
+        }
+
+        public IActionResult CreateTruck()
+        {
+            ViewBag.ProductType = "Truck";
+            ViewBag.Category = "Automobile";
+            return View("CreateAbstractProduct");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateTruck(string name, string description, int stockQuantity)
+        {
+            try
+            {
+                await _abstractProductService.CreateTruckAsync(name, description, stockQuantity);
+                TempData["SuccessMessage"] = "Truck created successfully using Abstract Factory!";
+                return RedirectToAction(nameof(AutomobileAbstract));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error creating truck: " + ex.Message;
+                ViewBag.ProductType = "Truck";
+                ViewBag.Category = "Automobile";
+                return View("CreateAbstractProduct");
+            }
+        }
+
+        public IActionResult CreateBike()
+        {
+            ViewBag.ProductType = "Bike";
+            ViewBag.Category = "Automobile";
+            return View("CreateAbstractProduct");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateBike(string name, string description, int stockQuantity)
+        {
+            try
+            {
+                await _abstractProductService.CreateBikeAsync(name, description, stockQuantity);
+                TempData["SuccessMessage"] = "Bike created successfully using Abstract Factory!";
+                return RedirectToAction(nameof(AutomobileAbstract));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error creating bike: " + ex.Message;
+                ViewBag.ProductType = "Bike";
+                ViewBag.Category = "Automobile";
+                return View("CreateAbstractProduct");
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateCurtains(string name, string description, int stockQuantity)

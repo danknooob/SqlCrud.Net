@@ -32,6 +32,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAbstractProductFactory, AbstractProductFactory>();
 builder.Services.AddScoped<IElectronicsFactory, ElectronicsFactory>();
 builder.Services.AddScoped<IFurnitureFactory, FurnitureFactory>();
+builder.Services.AddScoped<IAutomobileFactory, AutomobileFactory>();
 builder.Services.AddScoped<IAbstractProductService, AbstractProductService>();
 
 // Add Swagger/OpenAPI services

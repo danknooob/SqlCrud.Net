@@ -1,0 +1,187 @@
+@model IEnumerable<Product>
+
+@{
+    ViewData["Title"] = "Automobile Products - Abstract Factory";
+    var category = ViewBag.Category as string;
+    var factoryType = ViewBag.FactoryType as string;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Header Section -->
+        <div class="col-12 mb-4">
+            <div class="text-center">
+                <h1 class="display-4 fw-bold text-danger">
+                    <i class="fas fa-car me-3"></i>@factoryType Pattern - @category
+                </h1>
+                <p class="lead text-muted">Manage automobile products using the Abstract Factory Pattern</p>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="col-12 mb-4">
+            <div class="d-flex justify-content-center flex-wrap gap-3">
+                <a asp-action="CreateCar" class="btn btn-danger btn-lg">
+                    <i class="fas fa-car me-2"></i>Create Car
+                </a>
+                <a asp-action="CreateTruck" class="btn btn-warning btn-lg">
+                    <i class="fas fa-truck me-2"></i>Create Truck
+                </a>
+                <a asp-action="CreateBike" class="btn btn-info btn-lg">
+                    <i class="fas fa-motorcycle me-2"></i>Create Bike
+                </a>
+                <a asp-action="CategorySelection" class="btn btn-outline-secondary btn-lg">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Categories
+                </a>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="col-12">
+            @if (Model != null && Model.Any())
+            {
+                <div class="row">
+                    @foreach (var product in Model)
+                    {
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card h-100 border-danger">
+                                <div class="card-header bg-danger text-white">
+                                    <h5 class="mb-0">
+                                        @if (product.Description.Contains("🚗 Car:"))
+                                        {
+                                            <i class="fas fa-car me-2"></i>
+                                        }
+                                        else if (product.Description.Contains("🚛 Truck:"))
+                                        {
+                                            <i class="fas fa-truck me-2"></i>
+                                        }
+                                        else if (product.Description.Contains("🏍️ Bike:"))
+                                        {
+                                            <i class="fas fa-motorcycle me-2"></i>
+                                        }
+                                        @product.Name
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">@product.Description</p>
+                                    <div class="row text-center">
+                                        <div class="col-6">
+                                            <small class="text-muted">Stock</small>
+                                            <div class="fw-bold text-primary">@product.StockQuantity</div>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted">Status</small>
+                                            <div>
+                                                @if (product.IsActive)
+                                                {
+                                                    <span class="badge bg-success">Active</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger">Inactive</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar me-1"></i>
+                                            Created: @product.DateCreated.ToString("MMM dd, yyyy")
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-light">
+                                    <div class="btn-group w-100" role="group">
+                                        <a asp-action="CategoryDetails" asp-route-category="@category" asp-route-id="@product.Id" 
+                                           class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-eye me-1"></i>View
+                                        </a>
+                                        <a asp-action="CategoryEdit" asp-route-category="@category" asp-route-id="@product.Id" 
+                                           class="btn btn-outline-warning btn-sm">
+                                            <i class="fas fa-edit me-1"></i>Edit
+                                        </a>
+                                        <a asp-action="CategoryDelete" asp-route-category="@category" asp-route-id="@product.Id" 
+                                           class="btn btn-outline-danger btn-sm">
+                                            <i class="fas fa-trash me-1"></i>Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <div class="card border-danger">
+                        <div class="card-body">
+                            <i class="fas fa-car fa-4x text-muted mb-3"></i>
+                            <h3 class="text-muted">No @category Products Found</h3>
+                            <p class="text-muted">Start by creating your first automobile product using the Abstract Factory Pattern.</p>
+                            <div class="mt-4">
+                                <a asp-action="CreateCar" class="btn btn-danger me-2">
+                                    <i class="fas fa-car me-2"></i>Create Car
+                                </a>
+                                <a asp-action="CreateTruck" class="btn btn-warning me-2">
+                                    <i class="fas fa-truck me-2"></i>Create Truck
+                                </a>
+                                <a asp-action="CreateBike" class="btn btn-info">
+                                    <i class="fas fa-motorcycle me-2"></i>Create Bike
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Statistics Card -->
+        @if (Model != null && Model.Any())
+        {
+            <div class="col-12 mt-4">
+                <div class="card border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-chart-bar me-2"></i>@category Statistics
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <h4 class="text-danger">@Model.Count()</h4>
+                                <small class="text-muted">Total Products</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 class="text-success">@Model.Count(p => p.IsActive)</h4>
+                                <small class="text-muted">Active Products</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 class="text-warning">@Model.Sum(p => p.StockQuantity)</h4>
+                                <small class="text-muted">Total Stock</small>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 class="text-info">@Model.Count(p => p.Description.Contains("🚗 Car:"))</h4>
+                                <small class="text-muted">Cars</small>
+                            </div>
+                        </div>
+                        <div class="row text-center mt-3">
+                            <div class="col-md-4">
+                                <h5 class="text-warning">@Model.Count(p => p.Description.Contains("🚛 Truck:"))</h5>
+                                <small class="text-muted">Trucks</small>
+                            </div>
+                            <div class="col-md-4">
+                                <h5 class="text-info">@Model.Count(p => p.Description.Contains("🏍️ Bike:"))</h5>
+                                <small class="text-muted">Bikes</small>
+                            </div>
+                            <div class="col-md-4">
+                                <h5 class="text-secondary">@Model.Count(p => !p.IsActive)</h5>
+                                <small class="text-muted">Inactive</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

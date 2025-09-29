@@ -101,7 +101,8 @@ SQLCRUD/
 │   ├── CategoryCrudFactory.cs
 │   ├── AbstractProductFactory.cs
 │   ├── ElectronicsFactory.cs
-│   └── FurnitureFactory.cs
+│   ├── FurnitureFactory.cs
+│   └── AutomobileFactory.cs
 ├── Services/             # Business Logic Services
 │   ├── ProductService.cs
 │   └── AbstractProductService.cs
@@ -136,6 +137,7 @@ SQLCRUD/
 - **AbstractProductFactory**: Creates factories for different product families
 - **ElectronicsFactory**: Creates mobile phones, laptops, and headphones
 - **FurnitureFactory**: Creates sofas, tables, beds, and curtains
+- **AutomobileFactory**: Creates cars, trucks, and bikes
 - **Specialized Product Creation**: Each product type has unique characteristics and emoji prefixes
 
 ### Product Management
@@ -330,7 +332,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - ✅ **View Fixes**: Resolved CreateHeadphones and other create endpoints
 - ✅ **Generic Views**: Implemented CreateAbstractProduct view for all product types
 - ✅ **Category Management**: Enhanced category selection and management interface
-- ✅ **Product Types**: Added specialized creation for Electronics and Furniture products
+- ✅ **Product Types**: Added specialized creation for Electronics, Furniture, and Automobile products
+- ✅ **Automobile Features**: Added cars, trucks, and bikes with Abstract Factory Pattern
 - ✅ **Port Configuration**: Updated to use port 50001 for HTTP and 7000 for HTTPS
 
 ### Bug Fixes

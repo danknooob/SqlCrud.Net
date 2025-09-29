@@ -20,5 +20,10 @@ namespace SQLCRUD.Factories
         {
             return new FurnitureFactory(_productFactory);
         }
+
+        public IAutomobileFactory CreateAutomobileFactory()
+        {
+            return new AutomobileFactory(_productFactory);
+        }
     }
 }
