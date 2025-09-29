@@ -1,48 +1,43 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SQLCRUD.Data;
+using SQLCRUD.Interfaces;
 using SQLCRUD.Models;
 
 namespace SQLCRUD.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IProductService _productService;
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductsController(IProductService productService)
         {
-            _context = context;
+            _productService = productService;
         }
 
         // GET: Products
         public async Task<IActionResult> Index(string searchString, string categoryFilter)
         {
-            var products = from p in _context.Products
-                           select p;
+            IEnumerable<Product> products;
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                products = products.Where(p => p.Name.Contains(searchString) ||
-                                              p.Description.Contains(searchString) ||
-                                              p.Category.Contains(searchString));
+                products = await _productService.SearchProductsAsync(searchString);
             }
-
-            if (!string.IsNullOrEmpty(categoryFilter))
+            else if (!string.IsNullOrEmpty(categoryFilter))
             {
-                products = products.Where(p => p.Category == categoryFilter);
+                products = await _productService.GetProductsByCategoryAsync(categoryFilter);
+            }
+            else
+            {
+                products = await _productService.GetAllProductsAsync();
             }
 
-            var categories = await _context.Products
-                .Select(p => p.Category)
-                .Distinct()
-                .OrderBy(c => c)
-                .ToListAsync();
+            var categories = await _productService.GetCategoriesAsync();
 
             ViewBag.Categories = categories;
             ViewBag.CurrentSearch = searchString;
             ViewBag.CurrentCategory = categoryFilter;
 
-            return View(await products.OrderBy(p => p.Name).ToListAsync());
+            return View(products);
         }
 
         // GET: Products/Details/5
@@ -53,8 +48,7 @@ namespace SQLCRUD.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = await _productService.GetProductByIdAsync(id.Value);
             if (product == null)
             {
                 return NotFound();
@@ -66,33 +60,30 @@ namespace SQLCRUD.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            return View(new Product());
+            return View(new ProductDto());
         }
 
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Category,StockQuantity")] Product product)
+        public async Task<IActionResult> Create(ProductDto productDto)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    product.DateCreated = DateTime.Now;
-                    product.IsActive = true; // Set to true by default
-                    _context.Add(product);
-                    await _context.SaveChangesAsync();
+                    await _productService.CreateProductAsync(productDto);
                     TempData["SuccessMessage"] = "Product created successfully!";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
                     TempData["ErrorMessage"] = "Error creating product: " + ex.Message;
-                    return View(product);
+                    return View(productDto);
                 }
             }
             
-            return View(product);
+            return View(productDto);
         }
 
         // GET: Products/Edit/5
@@ -103,20 +94,32 @@ namespace SQLCRUD.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productService.GetProductByIdAsync(id.Value);
             if (product == null)
             {
                 return NotFound();
             }
-            return View(product);
+
+            var productDto = new ProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Category = product.Category,
+                StockQuantity = product.StockQuantity,
+                IsActive = product.IsActive,
+                DateCreated = product.DateCreated
+            };
+
+            return View(productDto);
         }
 
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Category,StockQuantity,DateCreated,IsActive")] Product product)
+        public async Task<IActionResult> Edit(int id, ProductDto productDto)
         {
-            if (id != product.Id)
+            if (id != productDto.Id)
             {
                 return NotFound();
             }
@@ -125,24 +128,21 @@ namespace SQLCRUD.Controllers
             {
                 try
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "Product updated successfully!";
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.Id))
+                    var updatedProduct = await _productService.UpdateProductAsync(id, productDto);
+                    if (updatedProduct == null)
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    TempData["SuccessMessage"] = "Product updated successfully!";
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = "Error updating product: " + ex.Message;
+                    return View(productDto);
+                }
             }
-            return View(product);
+            return View(productDto);
         }
 
         // GET: Products/Delete/5
@@ -153,8 +153,7 @@ namespace SQLCRUD.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = await _productService.GetProductByIdAsync(id.Value);
             if (product == null)
             {
                 return NotFound();
@@ -168,20 +167,25 @@ namespace SQLCRUD.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
+            try
             {
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Product deleted successfully!";
+                var result = await _productService.DeleteProductAsync(id);
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "Product deleted successfully!";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Product not found!";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error deleting product: " + ex.Message;
             }
 
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(int id)
-        {
-            return _context.Products.Any(e => e.Id == id);
-        }
     }
 }

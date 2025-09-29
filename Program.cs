@@ -3,6 +3,9 @@ using SQLCRUD.Data;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using SQLCRUD.Filters;
+using SQLCRUD.Interfaces;
+using SQLCRUD.Factories;
+using SQLCRUD.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +22,10 @@ builder.Services.AddControllers();
 // Add Entity Framework
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register Factory Pattern Services
+builder.Services.AddScoped<IProductFactory, ProductFactory>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 // Add Swagger/OpenAPI services
 builder.Services.AddEndpointsApiExplorer();

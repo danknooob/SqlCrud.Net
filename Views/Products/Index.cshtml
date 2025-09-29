@@ -4,13 +4,13 @@
     ViewData["Title"] = "Product Management";
 }
 
-@if (TempData["SuccessMessage"] != null)
+<!-- @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-}
+} -->
 
 <div class="container-fluid">
     <div class="row">
@@ -29,7 +29,7 @@
         <!-- Products Section -->
         <div class="col-12">
             <div class="products-section">
-                @if (Model.Any())
+                @if (Model != null && Model.Any())
                 {
                     <div class="products-grid">
                         @foreach (var item in Model)
